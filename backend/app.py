@@ -1,24 +1,29 @@
-from flask import Flask, request, jsonify, render_template, send_from_directory
-import os
-from flask import Flask, send_from_directory, request, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from flask_jwt_extended import JWTManager, jwt_required
+from flask_jwt_extended import create_access_token, jwt_required, JWTManager, get_jwt_identity
+import os
 from config import Config
-
-app = Flask(__name__, template_folder='templates', static_folder='static')
-jwt = JWTManager(app)
-app.config.from_object(Config)
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+
+app = Flask(
+    __name__,
+    static_folder='../frontend/build/static',
+    template_folder='../frontend/build'
+)
+app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key'  # Change this to a strong, random key in production
+db.init_app(app)
+
+# Initialize Flask-Login
+login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# Import models AFTER db and login_manager are defined
-from models import User
-
-db.init_app(app)
-login_manager.init_app(app)
+# Initialize Flask-JWT-Extended
+jwt = JWTManager(app)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -102,5 +107,15 @@ def homepage():
 def protected():
     return jsonify({'message': f'Hello, {current_user.username}! You are authenticated.'}), 200
 
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_react_app(path):
+    if path != "" and os.path.exists(app.template_folder + '/' + path):
+        return send_from_directory(app.template_folder, path)
+    else:
+        return send_from_directory(app.template_folder, 'index.html')
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True, host='0.0.0.0', port=5001)
