@@ -28,14 +28,14 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-navy-900 via-blue-900 to-blue-800" id='login'>
+    <div className="min-h-screen " id='login'>
       <div className="flex min-h-screen">
         {/* Left Side - Branding */}
         <div className="hidden lg:flex lg:w-1/2 flex-col justify-center px-12 text-white">
           <div className="mb-8">
             <div className="flex items-center space-x-2 mb-6">
               <Package className="h-10 w-10 text-blue-400" />
-              <span className="font-bold text-3xl">BASIX</span>
+              <span className="font-bold text-3xl">BASIX IP Marketplace</span>
             </div>
             <h1 className="text-4xl font-bold mb-4">
               Welcome Back to the

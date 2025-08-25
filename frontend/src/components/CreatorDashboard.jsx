@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react';
 import {featuredAssets} from '../constants'
 import { Plus, TrendingUp, DollarSign, Package, Eye, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import AssetUploadForm from './AssetUploadForm';
 
 const CreatorDashboard = () => {
+   const [showUploadForm, setShowUploadForm] = useState(false);
+
   return (
     <div>
         <div className="max-w-7xl mx-auto px-4 py-8" id='creator-dashboard'>
@@ -64,13 +67,12 @@ const CreatorDashboard = () => {
             <div className="p-6 border-b border-gray-100">
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold text-gray-900">Your Assets</h2>
-                <Link 
-                  to="/assets"
-                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Asset
-                </Link>
+               <Link to="/asset-upload"
+                 className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-xl hover:shadow-xl transition-all duration-300 font-semibold"
+                 >
+                <Plus className="w-5 h-5" />
+                <span>Create Asset</span>
+               </Link>
               </div>
             </div>
             
