@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: all run clean backend virtual-environment
+.PHONY: all run clean frontend backend virtual-environment
 
 
 
