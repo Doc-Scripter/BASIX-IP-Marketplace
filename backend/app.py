@@ -76,7 +76,7 @@ def logout():
     logout_user()
     return jsonify({'message': 'Logged out successfully'}), 200
 
-# Example protected route
+# protected route
 @app.route('/api/protected')
 @login_required
 def protected():
