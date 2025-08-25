@@ -3,37 +3,36 @@ import os
 from flask import Flask, send_from_directory, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_jwt_extended import JWTManager, jwt_required
 from config import Config
 
-app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
+app = Flask(__name__, template_folder='templates', static_folder='static')
+jwt = JWTManager(app)
 app.config.from_object(Config)
 
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 login_manager = LoginManager()
-login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-from models import User # Import User from models.py after db and login_manager are defined
+# Import models AFTER db and login_manager are defined
+from models import User
+
+db.init_app(app)
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 # Create database tables if they don't exist
 with app.app_context():
     db.create_all()
 
-@app.route('/', methods=['GET'])
-def serve_react_app():
-    return send_from_directory(app.static_folder, 'index.html')
 
-# Add a catch-all route for client-side routing (important for React Router)
-@app.route('/<path:path>')
-def serve_static_files(path):
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
 
 # API for user registration
 @app.route('/api/register', methods=['POST'])
-def register():
+def api_register():
     data = request.get_json()
     username = data.get('username')
     email = data.get('email')
@@ -56,7 +55,7 @@ def register():
 
 # API for user login
 @app.route('/api/login', methods=['POST'])
-def login():
+def api_login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
@@ -76,9 +75,30 @@ def logout():
     logout_user()
     return jsonify({'message': 'Logged out successfully'}), 200
 
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
 # protected route
-@app.route('/api/protected')
-@login_required
+@app.route('/homepage')
+@jwt_required()
+def homepage():
+    return render_template('homepage.html')
+
+@app.route('/protected')
+@jwt_required()
 def protected():
     return jsonify({'message': f'Hello, {current_user.username}! You are authenticated.'}), 200
 
