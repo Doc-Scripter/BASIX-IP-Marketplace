@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Package, ArrowRight, Eye, EyeOff, User, Building } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/Authcontext';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({

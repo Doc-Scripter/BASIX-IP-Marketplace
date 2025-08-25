@@ -7,7 +7,7 @@ import Dashboard from './pages/Dashboard'
 import Register from './pages/Register'
 import AssetUploadForm from './components/AssetUploadForm'
 
-import { AuthProvider } from './context/AuthContext'    
+import { AuthProvider } from './context/Authcontext'    
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const App = () => {
