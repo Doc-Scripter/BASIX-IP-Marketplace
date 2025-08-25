@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Package, ArrowRight, Eye, EyeOff, User, Building } from 'lucide-react';
 import { useAuth } from '../context/Authcontext';
 
-const LoginPage = () => {
+const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -166,4 +166,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default Login;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Package, User, Building, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import axios from "axios";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -22,16 +23,33 @@ const Register = () => {
     
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      console.log('Registration successful:', formData);
-      alert('Registration successful!');
-    } catch (error) {
-      console.error('Registration failed:', error);
-    } finally {
-      setIsLoading(false);
+    const response = await fetch("http://localhost:5001/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: formData.name,
+        email: formData.email,
+        password: formData.password,
+        userType: formData.userType
+      }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert("Registration successful!");
+      console.log(data);
+    } else {
+      alert(data.message || "Registration failed");
     }
-  };
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Something went wrong. Try again.");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen " id='register'>
