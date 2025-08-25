@@ -2,9 +2,6 @@
 
 This document outlines the planned documentation for the BASIX-IP-Marketplace project.
 
-## High-Level Architecture
-- [ ] Update `README.md` with a high-level overview of the project architecture.
-
 
 ## Project Overview (from instructions.md)
 
