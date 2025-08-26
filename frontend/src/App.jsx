@@ -7,7 +7,10 @@ import Dashboard from './pages/Dashboard'
 import Register from './pages/Register'
 import AssetUploadForm from './components/AssetUploadForm'
 import WalletPage from './pages/WalletPage'
-
+import ProtectedRoute from './components/ProtectedRoute';
+import FundingPage from './pages/FundingPage'
+import PortfolioPage from './pages/PortfolioPage'
+import InvestmentAlertsModal from './components/InvestmentAlertsModal'
 import { AuthProvider } from './context/Authcontext'    
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -19,12 +22,31 @@ const App = () => {
           <Navbar />
           <Routes>
             <Route path="/" element={<Homepage />} />
-            <Route path="/assets" element={<Assets />} />
-            <Route path="/login" element={<Login />} />
+             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/asset-upload" element={<AssetUploadForm />} />
-            <Route path="/wallet" element={<WalletPage />} />
+            <Route path="/funding" element={<FundingPage />} />
+            <Route path="/portfolio" element={<PortfolioPage />} />
+            <Route path="/investment-alerts" element={<InvestmentAlertsModal />} />
+            <Route path="/assets" element={
+              <ProtectedRoute>
+                <Assets />
+              </ProtectedRoute>
+            } />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/asset-upload" element={
+              <ProtectedRoute>
+                <AssetUploadForm />
+              </ProtectedRoute>
+            } />
+            <Route path="/wallet" element={
+              <ProtectedRoute>
+                <WalletPage />
+              </ProtectedRoute>
+            } />
         </Routes>
       </Router>
       </AuthProvider>
