@@ -173,6 +173,26 @@ const Homepage = () => {
         </div>
       </div>
     </section>
+
+    <section className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold text-gray-900 mb-6">Ready to Transform Your Ideas?</h2>
+          <p className="text-xl text-gray-600 mb-10">
+            Join the revolution of creators building sustainable revenue streams 
+            through AI-powered asset tokenization.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link 
+              to="/register" 
+              className="inline-flex items-center justify-center bg-gradient-to-r from-cyan-600 to-blue-600 px-10 py-4 rounded-lg transition-all transform hover:scale-105 font-medium text-lg"
+            >
+              Start Your Journey
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
       
 

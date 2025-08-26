@@ -68,7 +68,7 @@ const Navbar = () => {
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-green-700 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 bg-cyan-700 rounded-full flex items-center justify-center">
                     <span className="text-white text-sm font-semibold">
                       {user?.full_name?.charAt(0) || user?.username?.charAt(0) || 'U'}
                     </span>
