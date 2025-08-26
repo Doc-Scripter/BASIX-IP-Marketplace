@@ -62,10 +62,10 @@ const Navbar = () => {
               <User size={16} />
               <span>Login</span>
             </Link>
-            <button className="flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 px-6 py-3 rounded-lg transition-all duration-300 font-semibold shadow-lg hover:shadow-blue-500/25 transform hover:scale-105">
+            <Link to='/wallet'className="flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 px-6 py-3 rounded-lg transition-all duration-300 font-semibold shadow-lg hover:shadow-blue-500/25 transform hover:scale-105">
               <Wallet size={16} />
               <span>Connect Wallet</span>
-            </button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}

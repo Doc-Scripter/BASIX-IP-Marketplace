@@ -10,20 +10,30 @@ const Login = () => {
     userType: 'creator'
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const [error, setError] = useState('');
+  const { login, isLoading } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setError('');
+
+    // Client-side validation
+    if (!formData.email.trim()) {
+      setError('Please enter your email address');
+      return;
+    }
+
+    if (!formData.password.trim()) {
+      setError('Please enter your password');
+      return;
+    }
+
     try {
       await login(formData.email, formData.password, formData.userType);
       navigate('/dashboard');
     } catch (error) {
-      console.error('Login failed:', error);
-    } finally {
-      setIsLoading(false);
+      setError(error.message || 'Login failed. Please check your credentials.');
     }
   };
 
@@ -55,6 +65,13 @@ const Login = () => {
               <h2 className="text-3xl font-bold text-white mb-2">Sign In</h2>
               <p className="text-blue-200">Access your BASIX account</p>
             </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm">
+                {error}
+              </div>
+            )}
 
             {/* User Type Selection */}
             <div className="mb-8">
@@ -138,14 +155,14 @@ const Login = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-medium text-white transition-colors flex items-center justify-center"
+                className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-medium text-white transition-colors flex items-center justify-center group"
               >
                 {isLoading ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 ) : (
                   <>
                     Sign In
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
                   </>
                 )}
               </button>

@@ -6,6 +6,7 @@ import Assets from './pages/Assets'
 import Dashboard from './pages/Dashboard'
 import Register from './pages/Register'
 import AssetUploadForm from './components/AssetUploadForm'
+import WalletPage from './pages/WalletPage'
 
 import { AuthProvider } from './context/Authcontext'    
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -23,6 +24,7 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/asset-upload" element={<AssetUploadForm />} />
+            <Route path="/wallet" element={<WalletPage />} />
         </Routes>
       </Router>
       </AuthProvider>

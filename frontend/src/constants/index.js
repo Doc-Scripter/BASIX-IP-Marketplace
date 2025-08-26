@@ -207,3 +207,64 @@ export const assets = [
       },
     };
   };
+
+  export const walletData = {
+    balance: {
+      ada: 2450.75,
+      usd: 1225.38
+    },
+    address: "addr1qx2fhv7rvv8q5jk3m7n8p9r0s1t2u3v4w5x6y7z8a9b0c1d2e3f4g5h6i7j8k9l0m1n2",
+    transactions: [
+      {
+        id: 1,
+        type: "receive",
+        amount: 500,
+        asset: "ADA",
+        from: "Investment Return - Coffee NFT",
+        timestamp: "2024-01-15 14:30",
+        status: "completed"
+      },
+      {
+        id: 2,
+        type: "send",
+        amount: 250,
+        asset: "ADA",
+        to: "Investment - Tea Plantation",
+        timestamp: "2024-01-14 09:15",
+        status: "completed"
+      },
+      {
+        id: 3,
+        type: "receive",
+        amount: 1200,
+        asset: "ADA",
+        from: "Asset Sale - Textile Collection",
+        timestamp: "2024-01-12 16:45",
+        status: "completed"
+      }
+    ],
+    tokens: [
+      {
+        name: "BASIX Token",
+        symbol: "BASIX",
+        balance: 1500,
+        value: "$450.00",
+        change: "+12.5%"
+      },
+      {
+        name: "Coffee Collection NFT",
+        symbol: "COFFEE",
+        balance: 3,
+        value: "$2,850.00",
+        change: "+24.5%"
+      },
+      {
+        name: "Kenyan Art Token",
+        symbol: "KART",
+        balance: 850,
+        value: "$340.00",
+        change: "+8.3%"
+      }
+    ]
+  };
+

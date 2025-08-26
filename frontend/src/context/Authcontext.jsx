@@ -17,7 +17,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Check if user is already logged in
     const savedUser = localStorage.getItem('basix_user');
-    if (savedUser) {
+    const token = localStorage.getItem('basix_token');
+    
+    if (savedUser && token) {
       setUser(JSON.parse(savedUser));
     }
     setIsLoading(false);
@@ -25,41 +27,100 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password, userType) => {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const newUser = {
-      id: Math.random().toString(36).substr(2, 9),
-      email,
-      name: email.split('@')[0],
-      userType
-    };
-    
-    setUser(newUser);
-    localStorage.setItem('basix_user', JSON.stringify(newUser));
-    setIsLoading(false);
+    try {
+      const response = await fetch("http://localhost:5001/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: email, // Your backend expects username field
+          password: password,
+          userType: userType
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        const userData = {
+          id: data.user.id || Math.random().toString(36).substr(2, 9),
+          email: data.user.email,
+          name: data.user.username,
+          userType: userType
+        };
+        
+        setUser(userData);
+        localStorage.setItem('basix_user', JSON.stringify(userData));
+        
+        // Store token if your backend provides one in the future
+        if (data.token) {
+          localStorage.setItem('basix_token', data.token);
+        }
+        
+        return userData;
+      } else {
+        throw new Error(data.message || "Login failed");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const register = async (data) => {
+  const register = async (userData) => {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const newUser = {
-      id: Math.random().toString(36).substr(2, 9),
-      email: data.email,
-      name: data.name,
-      userType: data.userType
-    };
-    
-    setUser(newUser);
-    localStorage.setItem('basix_user', JSON.stringify(newUser));
-    setIsLoading(false);
+    try {
+      const response = await fetch("http://localhost:5001/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: userData.name,
+          email: userData.email,
+          password: userData.password,
+          userType: userData.userType
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        // After successful registration, log the user in
+        await login(userData.email, userData.password, userData.userType);
+        return data;
+      } else {
+        throw new Error(data.message || "Registration failed");
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('basix_user');
+  const logout = async () => {
+    try {
+      // Call backend logout endpoint
+      await fetch("http://localhost:5001/api/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('basix_token')}` // If you implement JWT
+        },
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      // Clear local state regardless of API call success
+      setUser(null);
+      localStorage.removeItem('basix_user');
+      localStorage.removeItem('basix_token');
+    }
   };
 
   return (
