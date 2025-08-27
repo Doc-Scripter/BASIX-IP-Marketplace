@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import create_access_token, jwt_required, JWTManager, get_jwt_identity
 import os
@@ -8,6 +9,7 @@ from models import db, User, Asset # Import Asset model
 
 
 app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"], "allow_headers": ["Content-Type", "Authorization"]}})
 app.config.from_object(Config)
 db.init_app(app)
 
