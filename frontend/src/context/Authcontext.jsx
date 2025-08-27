@@ -30,21 +30,21 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password, userType) => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/login", {
+      const response = await fetch("http://localhost:5001/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: email, // Your backend expects username field
+          email: email, 
           password: password,
           userType: userType
         }),
       });
 
-      const data = await response.json();
+      const data = response.data;
       
-      if (response.ok) {
+      if (response.status >= 200 && response.status < 300) {
         if (data.token) {
           localStorage.setItem('basix_token', data.token);
         }
@@ -64,22 +64,22 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/register", {
+      const response = await fetch("http://localhost:5001/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: userData.name,
+          username: userData.username,
           email: userData.email,
           password: userData.password,
           userType: userData.userType
         }),
       });
 
-      const data = await response.json();
+      const data = response.data;
       
-      if (response.ok) {
+      if (response.status >= 200 && response.status < 300) {
         // After successful registration, log the user in
         await login(userData.email, userData.password, userData.userType);
         return data;
@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       // Call backend logout endpoint
-      await fetch("http://localhost:5000/api/logout", {
+      await fetch("http://localhost:5001/api/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
