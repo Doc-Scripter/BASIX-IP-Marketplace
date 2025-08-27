@@ -9,13 +9,12 @@ import AssetUploadForm from './components/AssetUploadForm'
 import WalletPage from './pages/WalletPage'
 
 import { AuthProvider } from './context/Authcontext'    
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 const App = () => {
   return (
     <div className='min-h-screen bg-gradient-to-br from-navy-900 via-blue-900 to-slate-900 text-white overflow-hidden relative' style={{background: 'linear-gradient(135deg, #1e293b 0%, #1e3a8a 35%, #0f172a 100%)'}}>
       <AuthProvider>
-        <Router>
           <Navbar />
           <Routes>
             <Route path="/" element={<Homepage />} />
@@ -26,7 +25,6 @@ const App = () => {
             <Route path="/asset-upload" element={<AssetUploadForm />} />
             <Route path="/wallet" element={<WalletPage />} />
         </Routes>
-      </Router>
       </AuthProvider>
     </div>
   )
