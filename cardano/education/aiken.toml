@@ -1,0 +1,5 @@
+name = "basix_ip_marketplace/education"
+version = "0.1.0"
+description = "Education platform smart contracts for BASIX-IP-Marketplace"
+repository = { type = "github", user = "", project = "" }
+licences = ["Apache-2.0"]
