@@ -26,7 +26,7 @@ frontend:
 backend:
 	@echo "Running backend..."
 	source .venv/bin/activate && cd backend && \
-	flask run || exit 1
+	flask run --host=0.0.0.0 --port=5001 || exit 1
 virtual-environment:
 	@echo "Setting up virtual environment..."
 	python3 -m venv .venv && \
