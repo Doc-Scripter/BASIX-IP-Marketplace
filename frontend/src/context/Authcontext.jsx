@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const login = async (email, password, userType) => {
+  const login = async (username, password, userType) => {
     setIsLoading(true);
     try {
       const response = await fetch("http://localhost:5001/api/login", {
@@ -36,13 +36,13 @@ export const AuthProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: email, 
+          username: username,
           password: password,
           userType: userType
         }),
       });
 
-      const data = response.data;
+      const data = await response.json();
       
       if (response.status >= 200 && response.status < 300) {
         if (data.token) {
@@ -77,11 +77,11 @@ export const AuthProvider = ({ children }) => {
         }),
       });
 
-      const data = response.data;
+      const data = await response.json();
       
       if (response.status >= 200 && response.status < 300) {
         // After successful registration, log the user in
-        await login(userData.email, userData.password, userData.userType);
+        await login(userData.username, userData.password, userData.userType);
         return data;
       } else {
         throw new Error(data.message || "Registration failed");

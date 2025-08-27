@@ -166,7 +166,7 @@ def api_login():
 
     user = User.query.filter_by(username=username).first()
 
-    if user and user.check_password(password) and user.usertype == usertype:
+    if user and user.check_password(password) and user.userType == usertype:
         access_token = create_access_token(identity=user.id)
         return jsonify(token=access_token), 200
     else:

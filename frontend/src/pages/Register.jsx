@@ -23,8 +23,8 @@ const Register = () => {
     setError('');
 
     // Client-side validation
-    if (!formData.name.trim()) {
-      setError('Please enter your full name');
+    if (!formData.username.trim()) {
+      setError('Please enter your username');
       return;
     }
 
@@ -151,6 +151,8 @@ const Register = () => {
                 </div>
 
                 <div className="space-y-6">
+
+
                   <div>
                     <label className="block text-sm font-medium text-blue-200 mb-2">
                       Username
@@ -162,20 +164,6 @@ const Register = () => {
                       onChange={(e) => setFormData({...formData, username: e.target.value})}
                       className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:border-cyan-400 focus:bg-white/15 text-white placeholder-blue-300/60 transition-all duration-200 backdrop-blur-sm"
                       placeholder="Choose a unique username"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-blue-200 mb-2">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:border-cyan-400 focus:bg-white/15 text-white placeholder-blue-300/60 transition-all duration-200 backdrop-blur-sm"
-                      placeholder="Enter your full name"
                     />
                   </div>
 
