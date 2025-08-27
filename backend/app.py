@@ -136,7 +136,7 @@ def api_register():
     password = data.get('password')
     user_type = data.get('userType')
 
-    if not username or not email or not password or not usertype:
+    if not username or not email or not password or not user_type:
         return jsonify({'message': 'Missing username, email, password, or usertype'}), 400
 
     if User.query.filter_by(username=username).first():
@@ -157,7 +157,9 @@ def api_login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-    usertype = data.get('usertype')
+    usertype = data.get('userType')
+
+    print(f"Received login data: {data}") # Debugging line
 
     if not username or not password or not usertype:
         return jsonify({'message': 'Missing username, password, or usertype'}), 400
