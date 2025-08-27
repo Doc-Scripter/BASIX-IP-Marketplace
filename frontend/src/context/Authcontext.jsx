@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext(undefined);
 
@@ -13,6 +14,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check if user is already logged in
@@ -28,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password, userType) => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5001/api/login", {
+      const response = await fetch("http://localhost:5000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,22 +45,11 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       
       if (response.ok) {
-        const userData = {
-          id: data.user.id || Math.random().toString(36).substr(2, 9),
-          email: data.user.email,
-          name: data.user.username,
-          userType: userType
-        };
-        
-        setUser(userData);
-        localStorage.setItem('basix_user', JSON.stringify(userData));
-        
-        // Store token if your backend provides one in the future
         if (data.token) {
           localStorage.setItem('basix_token', data.token);
         }
-        
-        return userData;
+        // Redirect to dashboard after successful login
+        navigate('/dashboard'); 
       } else {
         throw new Error(data.message || "Login failed");
       }
@@ -73,7 +64,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5001/api/register", {
+      const response = await fetch("http://localhost:5000/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -106,7 +97,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       // Call backend logout endpoint
-      await fetch("http://localhost:5001/api/logout", {
+      await fetch("http://localhost:5000/api/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
