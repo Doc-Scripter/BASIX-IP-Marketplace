@@ -5,7 +5,7 @@ import { useAuth } from '../context/Authcontext';
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
     userType: 'creator'
   });
@@ -19,8 +19,8 @@ const Login = () => {
     setError('');
 
     // Client-side validation
-    if (!formData.email.trim()) {
-      setError('Please enter your email address');
+    if (!formData.username.trim()) {
+      setError('Please enter your username');
       return;
     }
 
@@ -30,7 +30,7 @@ const Login = () => {
     }
 
     try {
-      await login(formData.email, formData.password, formData.userType);
+      await login(formData.username, formData.password, formData.userType);
       navigate('/dashboard');
     } catch (error) {
       setError(error.message || 'Login failed. Please check your credentials.');
@@ -107,15 +107,15 @@ const Login = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-blue-200 mb-2">
-                  Email Address
+                  Username
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   required
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  value={formData.username}
+                  onChange={(e) => setFormData({...formData, username: e.target.value})}
                   className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:border-blue-400 text-white placeholder-gray-400"
-                  placeholder="Enter your email"
+                  placeholder="Enter your username"
                 />
               </div>
 

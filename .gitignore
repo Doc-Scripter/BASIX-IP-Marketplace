@@ -1,3 +1,13 @@
+__pycache__/
+lib64/
+.vscode/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+.env
+bin/
 # Logs
 logs
 *.log
@@ -22,9 +32,18 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-/backend/.venv
-__pycache__
+
+# Virtual environments and dependencies
+.venv/
+backend/.venv/
+frontend/.vite/
+frontend/node_modules/
+frontend/dist/
+lib/
+
+# Python specific
+__pycache__/
 app.db
-node_modules
-instance
-build
+instance/
+build/
+venv/
