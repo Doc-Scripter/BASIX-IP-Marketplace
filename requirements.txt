@@ -1,5 +1,5 @@
 flask
-metta-py
+hyperon
 flask
 pycardano
 blockfrost-python

@@ -1,49 +1,41 @@
-import re
-from .metta_parser import load_metta_file
-import os
+from hyperon import MeTTa
 
-def load_kb():
-    filepath = os.path.join(os.path.dirname(__file__), '..', 'marketplace.metta')
-    metta_data = load_metta_file(filepath)
+def load_marketplace_data():
+    with open('/home/potter/BASIX-IP-Marketplace/marketplace.metta', 'r') as f:
+        metta_data = f.read()
 
-    creators = {}
-    products = {}
-    nfts = {}
+    metta = MeTTa()
+    metta.run(metta_data)
+
+    # Use hyperon to query the MeTTa space
+    creators = []
+    products = []
+    nfts = []
     funding_thresholds = {}
 
-    for item in metta_data:
-        tag = item['tag']
-        content = item['content']
+    # Query for creators
+    for result in metta.run('!(match &self (creator $id $name) ($id $name))'):
+        if result and len(result[0]) == 2:
+            creators.append({'id': result[0][0].get_object().value, 'name': result[0][1].get_object().value})
 
-        if tag == 'Creator':
-            parts = content.split(' ', 3)
-            name = parts[0]
-            wallet = parts[2]
-            skills_match = re.search(r'\["(.*?)"\]', parts[3])
-            skills = skills_match.group(1).split('" "') if skills_match else []
-            reputation_score_match = re.search(r'reputation_score (\d+)', parts[3])
-            reputation_score = int(reputation_score_match.group(1)) if reputation_score_match else None
-            creators[name] = {"wallet": wallet, "skills": skills, "reputation_score": reputation_score}
+    # Query for products
+    for result in metta.run('!(match &self (product $id $name $creator_id $description) ($id $name $creator_id $description))'):
+        if result and len(result[0]) == 4:
+            products.append({'id': result[0][0].get_object().value, 'name': result[0][1].get_object().value, 'creator_id': result[0][2].get_object().value, 'description': result[0][3].get_object().value})
 
-        elif tag == 'Product':
-            parts = content.split(' ', 1)
-            product_name = parts[0]
-            details = {}
-            # This is a simplified parsing. A more robust parser would be needed for complex attributes.
-            # For now, we'll just store the raw content.
-            products[product_name] = {"raw_content": parts[1]}
+    # Query for NFTs
+    for result in metta.run('!(match &self (nft $id $product_id $metadata_hash) ($id $product_id $metadata_hash))'):
+        if result and len(result[0]) == 3:
+            nfts.append({'id': result[0][0].get_object().value, 'product_id': result[0][1].get_object().value, 'metadata_hash': result[0][2].get_object().value})
 
-        elif tag == 'NFT':
-            parts = content.split(' ', 1)
-            nft_name = parts[0]
-            details = {}
-            # Simplified parsing
-            nfts[nft_name] = {"raw_content": parts[1]}
+    # Query for funding thresholds
+    for result in metta.run('!(match &self (funding-threshold $product_id $threshold) ($product_id $threshold))'):
+        if result and len(result[0]) == 2:
+            funding_thresholds[result[0][0].get_object().value] = int(result[0][1].get_object().value)
 
-        elif tag == 'FundingThreshold':
-            parts = content.split(' ')
-            nft_name = parts[0]
-            threshold = int(parts[1])
-            funding_thresholds[nft_name] = threshold
-
-    return creators, products, nfts, funding_thresholds
+    return {
+        'creators': creators,
+        'products': products,
+        'nfts': nfts,
+        'funding_thresholds': funding_thresholds
+    }

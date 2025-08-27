@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -5,7 +10,7 @@ from flask_jwt_extended import create_access_token, jwt_required, JWTManager, ge
 import os
 from config import Config
 from models import db, User, Asset # Import Asset model
-from kb.kb_loader import load_kb
+from kb.kb_loader import load_marketplace_data
 
 
 
@@ -27,6 +32,9 @@ with app.app_context():
     # Check if the database file exists, if not, create it
     if not os.path.exists('database.db'):
         db.create_all()
+
+# Load marketplace data
+marketplace_data = load_marketplace_data()
 
 # API for creating a new asset
 @app.route('/api/assets', methods=['POST'])
@@ -184,7 +192,7 @@ def api_logout():
 
 @app.route('/api/kb', methods=['GET'])
 def get_knowledge_base():
-    creators, products, nfts, funding_thresholds = load_kb()
+    creators, products, nfts, funding_thresholds = load_marketplace_data()
     return jsonify({
         'creators': creators,
         'products': products,
