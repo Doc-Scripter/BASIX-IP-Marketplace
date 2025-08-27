@@ -134,7 +134,7 @@ def api_register():
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
-    usertype = data.get('usertype')
+    user_type = data.get('userType')
 
     if not username or not email or not password or not usertype:
         return jsonify({'message': 'Missing username, email, password, or usertype'}), 400
@@ -144,7 +144,7 @@ def api_register():
     if User.query.filter_by(email=email).first():
         return jsonify({'message': 'Email already registered'}), 409
 
-    new_user = User(username=username, email=email, usertype=usertype)
+    new_user = User(username=username, email=email, userType=user_type)
     new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
