@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Upload, Image, Package, Globe, Zap } from 'lucide-react';
 
-const AssetUploadForm = () => {
+const AssetUploadForm = ({ onClose }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
@@ -38,6 +38,9 @@ const AssetUploadForm = () => {
 
   const handleClose = () => {
     setIsOpen(false);
+    if (onClose) {
+      onClose(); // Let parent component handle navigation
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -73,10 +76,10 @@ const AssetUploadForm = () => {
 
   if (!isOpen) {
     return (
-      <div className="fixed bottom-8 right-8 z-50">
+      <div className="fixed bottom-8 right-8 z-50" id='open-asset-upload-form'>
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 rounded-full shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-110"
+          className="bg-gradient-to-r font-bold  from-cyan-400 to-blue-400 text-white p-4 rounded-full shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 hover:scale-110"
         >
           <Package className="w-6 h-6" />
         </button>
@@ -94,7 +97,7 @@ const AssetUploadForm = () => {
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-blue-50">
           <div>
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-bold bg-gradient-to-r  from-cyan-400 to-blue-400 bg-clip-text text-transparent">
               Create New Asset
             </h2>
             <p className="text-gray-600 mt-1">Mint your digital or phygital asset with AI-powered features</p>
@@ -152,8 +155,8 @@ const AssetUploadForm = () => {
             <div
               className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 ${
                 dragOver 
-                  ? 'border-purple-400 bg-purple-50 scale-[1.02]' 
-                  : 'border-gray-300 hover:border-purple-300 hover:bg-purple-50/30'
+                  ? 'border-cyan-400 bg-purple-50 scale-[1.02]' 
+                  : 'border-gray-300 hover:border-cyan-300 hover:bg-purple-50/30'
               }`}
               onDragOver={(e) => {
                 e.preventDefault();
@@ -174,7 +177,7 @@ const AssetUploadForm = () => {
               <p className="text-sm text-gray-500 mb-4">Supports images, videos, audio, and documents</p>
               <button
                 type="button"
-                className="px-6 py-2 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 rounded-lg hover:from-purple-200 hover:to-blue-200 transition-all duration-200 font-medium"
+                className="px-6 py-2 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-lg hover:from-purple-200 hover:to-blue-200 transition-all duration-200 font-medium"
               >
                 Choose File
               </button>
@@ -299,7 +302,7 @@ const AssetUploadForm = () => {
                     type="checkbox"
                     checked={formData.utility.includes(utility)}
                     onChange={() => handleUtilityChange(utility)}
-                    className="w-4 h-4 text-purple-600 bg-white border-2 border-gray-300 rounded focus:ring-purple-500 focus:ring-2 transition-all duration-200"
+                    className="w-4 h-4 text-blue-600 bg-white border-2 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 transition-all duration-200"
                   />
                   <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors duration-200">{utility}</span>
                 </label>
@@ -319,7 +322,7 @@ const AssetUploadForm = () => {
             <button
               onClick={handleSubmit}
               disabled={isLoading}
-              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl hover:shadow-xl hover:shadow-purple-500/25 transition-all duration-300 font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+              className="px-6 py-3 bg-gradient-to-r  from-cyan-400 to-blue-400 text-white rounded-xl hover:shadow-xl hover:shadow-purple-500/25 transition-all duration-300 font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
             >
               {isLoading ? (
                 <>
