@@ -5,6 +5,7 @@ from flask_jwt_extended import create_access_token, jwt_required, JWTManager, ge
 import os
 from config import Config
 from models import db, User, Asset # Import Asset model
+from kb.kb_loader import load_kb
 
 
 
@@ -180,6 +181,16 @@ def api_logout():
     # This endpoint can be used for any server-side cleanup if necessary.
     return jsonify({'message': 'Logged out successfully (client-side token removal expected)'}), 200
 
+
+@app.route('/api/kb', methods=['GET'])
+def get_knowledge_base():
+    creators, products, nfts, funding_thresholds = load_kb()
+    return jsonify({
+        'creators': creators,
+        'products': products,
+        'nfts': nfts,
+        'funding_thresholds': funding_thresholds
+    }), 200
 
 if __name__ == '__main__':
     with app.app_context():

@@ -1,39 +1,49 @@
+import re
+from .metta_parser import load_metta_file
+import os
+
 def load_kb():
-    creators = {
-        "Alice": {"wallet": "addr1", "skills": ["art", "beadwork"]},
-        "Bob": {"wallet": "addr2", "skills": ["music", "performance"]},
-        "Charlie": {"wallet": "addr3", "skills": ["fashion", "design"]},
-        "David": {"wallet": "addr4", "skills": ["software", "ai", "games"]},
-    }
+    filepath = os.path.join(os.path.dirname(__file__), '..', 'marketplace.metta')
+    metta_data = load_metta_file(filepath)
 
-    products = {
-        "Maasai_Necklace": {"type": "ArtCraft", "category": "Beadwork", "creator": "Alice"},
-        "AfrobeatTrack1": {"type": "Music", "category": "Afrobeat", "creator": "Bob"},
-        "Maasai_Shuka": {"type": "Fashion", "category": "Textile", "creator": "Charlie"},
-        "Safari_Package1": {"type": "Tourism", "category": "Safari", "creator": ["Alice", "Bob"]},
-        "OralHistory1": {"type": "Heritage", "category": "OralHistory", "creator": "Charlie"},
-        "AIModel1": {"type": "Software", "category": "AI/ML", "creator": "David"},
-        "Game1": {"type": "Software", "category": "Gaming", "creator": "David"},
-    }
+    creators = {}
+    products = {}
+    nfts = {}
+    funding_thresholds = {}
 
-    nfts = {
-        "NFT_MaasaiNecklace": {"product": "Maasai_Necklace", "utilities": ["provenance", "resale_rights"], "ownership": {"Alice": "100%"}},
-        "NFT_AfrobeatTrack1": {"product": "AfrobeatTrack1", "utilities": ["streaming_rights", "royalties"], "ownership": {"Bob": "100%"}},
-        "NFT_Shuka1": {"product": "Maasai_Shuka", "utilities": ["redeem_physical", "digital_wearable"], "ownership": {"Charlie": "100%"}},
-        "NFT_Safari1": {"product": "Safari_Package1", "utilities": ["redeemable_experience", "eco_tourism_support"], "ownership": {"Alice": "60%", "Bob": "40%"}},
-        "NFT_OralHistory1": {"product": "OralHistory1", "utilities": ["archive_access", "preservation_funding"], "ownership": {"Charlie": "100%"}},
-        "NFT_AIModel1": {"product": "AIModel1", "utilities": ["license_key", "subscription_access", "royalty_share"], "ownership": {"David": "100%"}},
-        "NFT_Game1": {"product": "Game1", "utilities": ["lifetime_access", "in_game_assets", "updates_access"], "ownership": {"David": "100%"}},
-    }
+    for item in metta_data:
+        tag = item['tag']
+        content = item['content']
 
-    funding_thresholds = {
-        "NFT_MaasaiNecklace": 500,
-        "NFT_AfrobeatTrack1": 1000,
-        "NFT_Shuka1": 700,
-        "NFT_Safari1": 2000,
-        "NFT_OralHistory1": 1500,
-        "NFT_AIModel1": 5000,
-        "NFT_Game1": 3000,
-    }
+        if tag == 'Creator':
+            parts = content.split(' ', 3)
+            name = parts[0]
+            wallet = parts[2]
+            skills_match = re.search(r'\["(.*?)"\]', parts[3])
+            skills = skills_match.group(1).split('" "') if skills_match else []
+            reputation_score_match = re.search(r'reputation_score (\d+)', parts[3])
+            reputation_score = int(reputation_score_match.group(1)) if reputation_score_match else None
+            creators[name] = {"wallet": wallet, "skills": skills, "reputation_score": reputation_score}
+
+        elif tag == 'Product':
+            parts = content.split(' ', 1)
+            product_name = parts[0]
+            details = {}
+            # This is a simplified parsing. A more robust parser would be needed for complex attributes.
+            # For now, we'll just store the raw content.
+            products[product_name] = {"raw_content": parts[1]}
+
+        elif tag == 'NFT':
+            parts = content.split(' ', 1)
+            nft_name = parts[0]
+            details = {}
+            # Simplified parsing
+            nfts[nft_name] = {"raw_content": parts[1]}
+
+        elif tag == 'FundingThreshold':
+            parts = content.split(' ')
+            nft_name = parts[0]
+            threshold = int(parts[1])
+            funding_thresholds[nft_name] = threshold
 
     return creators, products, nfts, funding_thresholds
