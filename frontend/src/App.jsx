@@ -11,6 +11,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import FundingPage from './pages/FundingPage'
 import PortfolioPage from './pages/PortfolioPage'
 import InvestmentAlertsModal from './components/InvestmentAlertsModal'
+import CreatorDashboard from './components/CreatorDashboard'
 import Footer from './components/Footer'
 import { AuthProvider } from './context/Authcontext'    
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -32,12 +33,8 @@ const App = () => {
             <Route path="/wallet" element={<WalletPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/assets" element={<Assets />} />
-          
-            <Route path="/asset-upload" element={
-              <ProtectedRoute>
-                <AssetUploadForm />
-              </ProtectedRoute>
-            } />
+            <Route path="/creator-dashboard" element={<CreatorDashboard />} />
+            <Route path="/open-asset-upload-form" element={<AssetUploadForm />} />
         </Routes>
         <Footer />
       </Router>
