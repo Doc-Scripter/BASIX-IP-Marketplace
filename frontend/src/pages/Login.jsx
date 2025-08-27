@@ -30,8 +30,14 @@ const Login = () => {
     }
 
     try {
-      await login(formData.username, formData.password, formData.userType);
-      navigate('/dashboard');
+      const userType = await login(formData.username, formData.password, formData.userType);
+      if (userType === 'creator') {
+        navigate('/creator-dashboard');
+      } else if (userType === 'investor') {
+        navigate('/dashboard');
+      } else {
+        navigate('/'); // Default or error page
+      }
     } catch (error) {
       setError(error.message || 'Login failed. Please check your credentials.');
     }

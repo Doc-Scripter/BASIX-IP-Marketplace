@@ -177,7 +177,7 @@ def api_login():
 
     if user and user.check_password(password) and user.userType == usertype:
         access_token = create_access_token(identity=user.id)
-        return jsonify(token=access_token), 200
+        return jsonify(token=access_token, user_type=user.userType), 200
     else:
         return jsonify({'message': 'Invalid username, password, or usertype'}), 401
 

@@ -48,8 +48,7 @@ export const AuthProvider = ({ children }) => {
         if (data.token) {
           localStorage.setItem('basix_token', data.token);
         }
-        // Redirect to dashboard after successful login
-        navigate('/dashboard'); 
+        return data.user_type;
       } else {
         throw new Error(data.message || "Login failed");
       }
