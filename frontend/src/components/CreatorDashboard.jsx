@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { Plus, TrendingUp, DollarSign, Package, Eye, Users, BarChart3, Handshake, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import AssetUploadForm from './AssetUploadForm';
+import {assets} from '../constants'
 
 const CreatorDashboard = () => {
   const [selectedAssetTab, setSelectedAssetTab] = useState('overview');
@@ -218,7 +219,7 @@ const CreatorDashboard = () => {
                               </span>
                             </div>
                             <Link 
-                              to={`/asset/${asset.id}`}
+                              to={`/asset-detail-page/${asset.id}`}
                               className="flex items-center text-blue-600 hover:text-blue-700 text-sm"
                             >
                               <Eye className="h-4 w-4 mr-1" />
