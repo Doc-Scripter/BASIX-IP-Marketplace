@@ -1,0 +1,6 @@
+flask
+hyperon
+flask
+pycardano
+blockfrost-python
+python-dotenv
