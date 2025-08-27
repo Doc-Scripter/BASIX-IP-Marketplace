@@ -14,13 +14,12 @@ import InvestmentAlertsModal from './components/InvestmentAlertsModal'
 import CreatorDashboard from './components/CreatorDashboard'
 import Footer from './components/Footer'
 import { AuthProvider } from './context/Authcontext'    
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 const App = () => {
   return (
     <div className='min-h-screen  text-white overflow-hidden relative' style={{background: 'linear-gradient(135deg, #1e293b 0%, #1e3a8a 35%, #0f172a 100%)'}}>
       <AuthProvider>
-        <Router>
           <Navbar />
           
           <Routes>
@@ -37,7 +36,6 @@ const App = () => {
             <Route path="/open-asset-upload-form" element={<AssetUploadForm />} />
         </Routes>
         <Footer />
-      </Router>
       </AuthProvider>
     </div>
   )

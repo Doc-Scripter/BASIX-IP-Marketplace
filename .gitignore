@@ -28,3 +28,5 @@ app.db
 node_modules
 instance
 build
+.venv
+venv

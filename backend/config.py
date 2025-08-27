@@ -2,6 +2,7 @@ import os
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'a_very_secret_key_that_should_be_changed'
+    JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or 'your_jwt_secret_key' # Change this to a strong, random key in production
     # Cardano Node Configuration
     CARDANO_NODE_SOCKET_PATH = os.environ.get('CARDANO_NODE_SOCKET_PATH', '/path/to/cardano-node.socket')
     CARDANO_NETWORK = os.environ.get('CARDANO_NETWORK', 'testnet') # or 'mainnet'

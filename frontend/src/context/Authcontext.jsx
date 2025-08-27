@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext(undefined);
 
@@ -13,6 +14,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check if user is already logged in
@@ -25,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const login = async (email, password, userType) => {
+  const login = async (username, password, userType) => {
     setIsLoading(true);
     try {
       const response = await fetch("http://localhost:5001/api/login", {
@@ -34,7 +36,7 @@ export const AuthProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: email, // Your backend expects username field
+          username: username,
           password: password,
           userType: userType
         }),
@@ -42,23 +44,12 @@ export const AuthProvider = ({ children }) => {
 
       const data = await response.json();
       
-      if (response.ok) {
-        const userData = {
-          id: data.user.id || Math.random().toString(36).substr(2, 9),
-          email: data.user.email,
-          name: data.user.username,
-          userType: userType
-        };
-        
-        setUser(userData);
-        localStorage.setItem('basix_user', JSON.stringify(userData));
-        
-        // Store token if your backend provides one in the future
+      if (response.status >= 200 && response.status < 300) {
         if (data.token) {
           localStorage.setItem('basix_token', data.token);
         }
-        
-        return userData;
+        // Redirect to dashboard after successful login
+        navigate('/dashboard'); 
       } else {
         throw new Error(data.message || "Login failed");
       }
@@ -79,7 +70,7 @@ export const AuthProvider = ({ children }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          username: userData.name,
+          username: userData.username,
           email: userData.email,
           password: userData.password,
           userType: userData.userType
@@ -88,9 +79,9 @@ export const AuthProvider = ({ children }) => {
 
       const data = await response.json();
       
-      if (response.ok) {
+      if (response.status >= 200 && response.status < 300) {
         // After successful registration, log the user in
-        await login(userData.email, userData.password, userData.userType);
+        await login(userData.username, userData.password, userData.userType);
         return data;
       } else {
         throw new Error(data.message || "Registration failed");
