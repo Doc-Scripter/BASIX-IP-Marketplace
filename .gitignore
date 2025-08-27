@@ -1,4 +1,5 @@
 __pycache__/
+lib64/
 .vscode/
 *.pyc
 *.pyo
